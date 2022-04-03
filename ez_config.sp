@@ -5,9 +5,9 @@
 #pragma newdecls required
 #pragma semicolon 1
 
-ConVar f_maxvel;
-ConVar f_airaccel;
-ConVar f_accel;
+ConVar i_maxvel;
+ConVar i_airaccel;
+ConVar i_accel;
 
 public Plugin myinfo =
 {
@@ -28,9 +28,9 @@ public void OnPluginStart()
 	AutoExecConfig_SetCreateFile(true);
 	AutoExecConfig_SetFile("ez_config");
 
-	f_maxvel   = AutoExecConfig_CreateConVar("value_of_maxvelocity", "10000", "specifies value of maxvelocity", 0, true, 0.00, true, 10000.0);
-	f_airaccel = AutoExecConfig_CreateConVar("value_of_airaccelerate", "2000", "specifies value of airaccelerate", 0, true, 0.00, true, 10000.0);
-	f_accel    = AutoExecConfig_CreateConVar("value_of_accelerate", "10", "specifies value of accelerate", 0, true, 0.00, true, 100.0);
+	i_maxvel   = AutoExecConfig_CreateConVar("value_of_maxvelocity", "10000", "specifies value of maxvelocity", 0, true, 0.00, true, 10000.0);
+	i_airaccel = AutoExecConfig_CreateConVar("value_of_airaccelerate", "2000", "specifies value of airaccelerate", 0, true, 0.00, true, 10000.0);
+	i_accel    = AutoExecConfig_CreateConVar("value_of_accelerate", "10", "specifies value of accelerate", 0, true, 0.00, true, 100.0);
 
 	AutoExecConfig_ExecuteFile();
 	AutoExecConfig_CleanFile();
@@ -38,18 +38,18 @@ public void OnPluginStart()
 
 public void airacceleratesetting(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	if (convar.IntValue != f_airaccel.IntValue)
-		convar.IntValue = f_airaccel.IntValue;
+	if (convar.IntValue != i_airaccel.IntValue)
+		convar.IntValue = i_airaccel.IntValue;
 }
 
 public void acceleratesetting(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	if (convar.IntValue != f_accel.IntValue)
-		convar.IntValue = f_accel.IntValue;
+	if (convar.IntValue != i_accel.IntValue)
+		convar.IntValue = i_accel.IntValue;
 }
 
 public void velsetting(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	if (convar.IntValue != f_maxvel.IntValue)
-		convar.IntValue = f_maxvel.IntValue;
+	if (convar.IntValue != i_maxvel.IntValue)
+		convar.IntValue = i_maxvel.IntValue;
 }
