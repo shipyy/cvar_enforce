@@ -28,9 +28,9 @@ public void OnPluginStart()
 	AutoExecConfig_SetCreateFile(true);
 	AutoExecConfig_SetFile("ez_config");
 
-	i_maxvel   = AutoExecConfig_CreateConVar("value_of_maxvelocity", "10000", "specifies value of maxvelocity", 0, true, 0.00, true, 10000.0);
-	i_airaccel = AutoExecConfig_CreateConVar("value_of_airaccelerate", "2000", "specifies value of airaccelerate", 0, true, 0.00, true, 10000.0);
-	i_accel    = AutoExecConfig_CreateConVar("value_of_accelerate", "10", "specifies value of accelerate", 0, true, 0.00, true, 100.0);
+	i_maxvel   = AutoExecConfig_CreateConVar("maxvelocity", "10000", "specifies value of maxvelocity", 0, true, 0.00, true, 10000.0);
+	i_airaccel = AutoExecConfig_CreateConVar("airaccelerate", "2000", "specifies value of airaccelerate", 0, true, 0.00, true, 10000.0);
+	i_accel    = AutoExecConfig_CreateConVar("accelerate", "10", "specifies value of accelerate", 0, true, 0.00, true, 100.0);
 
 	AutoExecConfig_ExecuteFile();
 	AutoExecConfig_CleanFile();
