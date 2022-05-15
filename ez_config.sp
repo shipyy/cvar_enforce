@@ -23,7 +23,7 @@ public Plugin myinfo =
 	name        = "ez_config",
 	author      = "shipy",
 	description = "enforce cvars , on maps with hardcoded settings",
-	version     = "1.0.0",
+	version     = "1.1.0",
 	url         = "https://github.com/shipyy/ez_config"
 };
 
