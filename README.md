@@ -1,9 +1,9 @@
 # ez_config
 Enforce Cvars on maps with hardcoded settings (i.e. "sv_maxvelocity") and allow to set a specific value of `sv_maxvelocity` for each map.
 
-The whitelist containing the maxvel maps must be in `/csgo/maxvel_maps.txt`
+The whitelist containing the maxvel maps must be in `/csgo/addons/sourcemod/configs/surftimer/maxvel_maps.txt`
 
-`/csgo/maxvel_maps.txt` should look like this:
+`maxvel_maps.txt` should look like this:
 ```python
 <mapname>:<maxvel>
 surf_pox:3500
