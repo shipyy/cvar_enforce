@@ -1,4 +1,14 @@
 # ez_config
-enforce cvars , on maps with hardcoded settings
+Enforce Cvars on maps with hardcoded settings (i.e. "sv_maxvelocity") and allow to set a specific value of `sv_maxvelocity` for each map.
 
-the whitelist containing the maxvel maps must be in `/csgo/maxvel_maps.txt`
+The whitelist containing the maxvel maps must be in `/csgo/maxvel_maps.txt`
+
+`/csgo/maxvel_maps.txt` should look like this:
+```python
+surf_pox:3500
+surf_mesa:3500
+surf_beginner:1000
+surf_runewords:2000
+surf_zen2:6666
+surf_corruption:4567
+```

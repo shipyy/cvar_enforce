@@ -5,12 +5,18 @@
 #pragma newdecls required
 #pragma semicolon 1
 
+#define MAXVEL_MAPS_PATH "configs/surftimer/maxvel_maps.txt"
+
+char szMapName[128];
+
 ConVar i_airaccel;
 ConVar i_accel;
 ConVar i_maxvel;
 
-ArrayList g_MapListWhiteList;
-int g_mapFileSerial = -1;
+ArrayList WhiteList_Map;
+ArrayList WhiteList_MaxVel;
+
+int custom_maxvel = -1;
 
 public Plugin myinfo =
 {
@@ -21,20 +27,55 @@ public Plugin myinfo =
 	url         = "https://github.com/shipyy/ez_config"
 };
 
-public void OnPluginStart()
+public void OnMapStart()
 {
 
-	int arraySize = ByteCountToCells(PLATFORM_MAX_PATH);
-	g_MapListWhiteList = new ArrayList(arraySize);
+	GetCurrentMap(szMapName, sizeof(szMapName));
 
-	//READ FROM FILE "/csgo/maxvel_maps.txt"
-	if (ReadMapList(g_MapListWhiteList, g_mapFileSerial, "maxvel_maps", MAPLIST_FLAG_CLEARARRAY|MAPLIST_FLAG_MAPSFOLDER) != INVALID_HANDLE)
-	{
-		if (g_mapFileSerial == -1)
-		{
-			SetFailState("Unable to create a valid map list.");
+	int arraySize = ByteCountToCells(PLATFORM_MAX_PATH);
+	WhiteList_Map = new ArrayList(arraySize);
+	WhiteList_MaxVel = new ArrayList(arraySize);
+	
+	char sPath[PLATFORM_MAX_PATH];
+	BuildPath(Path_SM, sPath, sizeof(sPath), "%s", MAXVEL_MAPS_PATH);
+	PrintToServer("PATH %s\n", sPath);
+	File max_vel_maps = OpenFile(sPath, "r");
+
+	char line[128];
+	if (max_vel_maps != null){
+
+		while (!IsEndOfFile(max_vel_maps) && ReadFileLine(max_vel_maps, line, sizeof(line))){
+			TrimString(line); //remove white spaces
+
+			//split line (i.e. "surf_map:3500")
+			char line_pieces[2][128];
+			ExplodeString(line, ":", line_pieces, sizeof(line_pieces), sizeof(line_pieces[]));
+
+			WhiteList_Map.PushString(line_pieces[0]);
+			WhiteList_MaxVel.PushString(line_pieces[1]);
 		}
+
 	}
+	else
+		LogError("[SurfTimer] %s not found", MAXVEL_MAPS_PATH);
+
+	if (max_vel_maps != null)
+		CloseHandle(max_vel_maps);
+
+	//check if the map is in the whitelist
+	char szMaxVel[PLATFORM_MAX_PATH];
+
+	int index = WhiteList_Map.FindString(szMapName);
+
+	//if the map is in the whitelist
+	if(index != -1){
+		//get the maxvel value
+		WhiteList_MaxVel.GetString(index, szMaxVel, sizeof(szMaxVel));
+		custom_maxvel = StringToInt(szMaxVel);
+		PrintToServer("FOUND\n\n\n\n");
+		PrintToServer(szMaxVel);
+	}
+
 
 	FindConVar("sv_airaccelerate").AddChangeHook(airacceleratesetting);
 	FindConVar("sv_accelerate").AddChangeHook(acceleratesetting);
@@ -65,16 +106,12 @@ public void acceleratesetting(ConVar convar, const char[] oldValue, const char[]
 }
 
 public void velocitysetting(ConVar convar, const char[] oldValue, const char[] newValue)
-{	
-	char szMapName[128];
-	GetCurrentMap(szMapName, sizeof(szMapName));
-
+{
 	//IF THE MAPS IS NOT SUPOSED TO HAVE A MAXVEL;
-	if(FindStringInArray(g_MapListWhiteList, szMapName) == -1){
+	if(FindStringInArray(WhiteList_Map, szMapName) == -1){
 		if (convar.IntValue != i_maxvel.IntValue)
 			convar.IntValue = i_maxvel.IntValue;
 	}
-	else{
-		convar.IntValue = 3500;
-	}
+	else
+		convar.IntValue = custom_maxvel;
 }
