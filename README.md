@@ -5,6 +5,7 @@ The whitelist containing the maxvel maps must be in `/csgo/maxvel_maps.txt`
 
 `/csgo/maxvel_maps.txt` should look like this:
 ```python
+<mapname>:<maxvel>
 surf_pox:3500
 surf_mesa:3500
 surf_beginner:1000
