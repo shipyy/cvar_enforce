@@ -50,6 +50,7 @@ public void OnMapStart()
 		while (!IsEndOfFile(max_vel_maps) && ReadFileLine(max_vel_maps, line, sizeof(line))){
 			TrimString(line); //remove white spaces
 
+			//split line (i.e. "surf_map:3500")
 			char line_pieces[2][128];
 			ExplodeString(line, ":", line_pieces, sizeof(line_pieces), sizeof(line_pieces[]));
 
