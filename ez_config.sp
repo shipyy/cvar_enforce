@@ -13,8 +13,10 @@ ConVar i_airaccel;
 ConVar i_accel;
 ConVar i_maxvel;
 
-ArrayList WhiteList_Map;
-ArrayList WhiteList_MaxVel;
+//ArrayList WhiteList_Map;
+//ArrayList WhiteList_MaxVel;
+
+StringMap MaxVelMap;
 
 int custom_maxvel = -1;
 
@@ -28,13 +30,14 @@ public Plugin myinfo =
 };
 
 public void OnMapStart()
-{
+{	
+	MaxVelMap = new StringMap();
 
 	GetCurrentMap(szMapName, sizeof(szMapName));
 
-	int arraySize = ByteCountToCells(PLATFORM_MAX_PATH);
-	WhiteList_Map = new ArrayList(arraySize);
-	WhiteList_MaxVel = new ArrayList(arraySize);
+	//int arraySize = ByteCountToCells(PLATFORM_MAX_PATH);
+	//WhiteList_Map = new ArrayList(arraySize);
+	//WhiteList_MaxVel = new ArrayList(arraySize);
 	
 	char sPath[PLATFORM_MAX_PATH];
 	BuildPath(Path_SM, sPath, sizeof(sPath), "%s", MAXVEL_MAPS_PATH);
@@ -51,8 +54,10 @@ public void OnMapStart()
 			char line_pieces[2][128];
 			ExplodeString(line, ":", line_pieces, sizeof(line_pieces), sizeof(line_pieces[]));
 
-			WhiteList_Map.PushString(line_pieces[0]);
-			WhiteList_MaxVel.PushString(line_pieces[1]);
+			MaxVelMap.SetString(line_pieces[0], line_pieces[1]);
+
+			//WhiteList_Map.PushString(line_pieces[0]);
+			//WhiteList_MaxVel.PushString(line_pieces[1]);
 		}
 
 	}
@@ -63,17 +68,15 @@ public void OnMapStart()
 		CloseHandle(max_vel_maps);
 
 	//check if the map is in the whitelist
-	char szMaxVel[PLATFORM_MAX_PATH];
+	char szMaxVel[16];
 
-	int index = WhiteList_Map.FindString(szMapName);
+	//int index = WhiteList_Map.FindString(szMapName);
 
 	//if the map is in the whitelist
-	if(index != -1){
+	if(MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel))){
 		//get the maxvel value
-		WhiteList_MaxVel.GetString(index, szMaxVel, sizeof(szMaxVel));
+		//WhiteList_MaxVel.GetString(index, szMaxVel, sizeof(szMaxVel));
 		custom_maxvel = StringToInt(szMaxVel);
-		PrintToServer("FOUND\n\n\n\n");
-		PrintToServer(szMaxVel);
 	}
 
 
@@ -107,8 +110,11 @@ public void acceleratesetting(ConVar convar, const char[] oldValue, const char[]
 
 public void velocitysetting(ConVar convar, const char[] oldValue, const char[] newValue)
 {
+	char szMaxVel[16];
+
 	//IF THE MAPS IS NOT SUPOSED TO HAVE A MAXVEL;
-	if(FindStringInArray(WhiteList_Map, szMapName) == -1){
+	//if(FindStringInArray(WhiteList_Map, szMapName) == -1){
+	if(!MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel))){
 		if (convar.IntValue != i_maxvel.IntValue)
 			convar.IntValue = i_maxvel.IntValue;
 	}
