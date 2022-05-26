@@ -13,9 +13,6 @@ ConVar i_airaccel;
 ConVar i_accel;
 ConVar i_maxvel;
 
-//ArrayList WhiteList_Map;
-//ArrayList WhiteList_MaxVel;
-
 StringMap MaxVelMap;
 
 int custom_maxvel = -1;
@@ -34,10 +31,6 @@ public void OnMapStart()
 	MaxVelMap = new StringMap();
 
 	GetCurrentMap(szMapName, sizeof(szMapName));
-
-	//int arraySize = ByteCountToCells(PLATFORM_MAX_PATH);
-	//WhiteList_Map = new ArrayList(arraySize);
-	//WhiteList_MaxVel = new ArrayList(arraySize);
 	
 	char sPath[PLATFORM_MAX_PATH];
 	BuildPath(Path_SM, sPath, sizeof(sPath), "%s", MAXVEL_MAPS_PATH);
@@ -48,16 +41,12 @@ public void OnMapStart()
 	if (max_vel_maps != null){
 
 		while (!IsEndOfFile(max_vel_maps) && ReadFileLine(max_vel_maps, line, sizeof(line))){
-			TrimString(line); //remove white spaces
+			TrimString(line);
 
-			//split line (i.e. "surf_map:3500")
 			char line_pieces[2][128];
 			ExplodeString(line, ":", line_pieces, sizeof(line_pieces), sizeof(line_pieces[]));
 
 			MaxVelMap.SetString(line_pieces[0], line_pieces[1]);
-
-			//WhiteList_Map.PushString(line_pieces[0]);
-			//WhiteList_MaxVel.PushString(line_pieces[1]);
 		}
 
 	}
@@ -70,14 +59,9 @@ public void OnMapStart()
 	//check if the map is in the whitelist
 	char szMaxVel[16];
 
-	//int index = WhiteList_Map.FindString(szMapName);
-
 	//if the map is in the whitelist
-	if(MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel))){
-		//get the maxvel value
-		//WhiteList_MaxVel.GetString(index, szMaxVel, sizeof(szMaxVel));
+	if(MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel)))
 		custom_maxvel = StringToInt(szMaxVel);
-	}
 
 
 	FindConVar("sv_airaccelerate").AddChangeHook(airacceleratesetting);
@@ -113,7 +97,6 @@ public void velocitysetting(ConVar convar, const char[] oldValue, const char[] n
 	char szMaxVel[16];
 
 	//IF THE MAPS IS NOT SUPOSED TO HAVE A MAXVEL;
-	//if(FindStringInArray(WhiteList_Map, szMapName) == -1){
 	if(!MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel))){
 		if (convar.IntValue != i_maxvel.IntValue)
 			convar.IntValue = i_maxvel.IntValue;
