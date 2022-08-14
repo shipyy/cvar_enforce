@@ -1,0 +1,5 @@
+//EXAMPLE
+
+//<mapname>:<maxvel>
+//surf_pox:3500
+//surf_corruption:10000

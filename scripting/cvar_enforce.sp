@@ -19,11 +19,11 @@ int custom_maxvel = -1;
 
 public Plugin myinfo =
 {
-	name        = "ez_config",
+	name        = "Cvar Enforce",
 	author      = "shipy",
-	description = "enforce cvars , on maps with hardcoded settings",
-	version     = "1.1.0",
-	url         = "https://github.com/shipyy/ez_config"
+	description = "enforce cvars on maps with hardcoded settings",
+	version     = "2.0.0",
+	url         = "https://github.com/shipyy/cvar_enforce"
 };
 
 public void OnMapStart()
@@ -34,13 +34,12 @@ public void OnMapStart()
 	
 	char sPath[PLATFORM_MAX_PATH];
 	BuildPath(Path_SM, sPath, sizeof(sPath), "%s", MAXVEL_MAPS_PATH);
-	PrintToServer("PATH %s\n", sPath);
 	File max_vel_maps = OpenFile(sPath, "r");
 
 	char line[128];
-	if (max_vel_maps != null){
+	if (max_vel_maps != null) {
 
-		while (!IsEndOfFile(max_vel_maps) && ReadFileLine(max_vel_maps, line, sizeof(line))){
+		while (!IsEndOfFile(max_vel_maps) && ReadFileLine(max_vel_maps, line, sizeof(line))) {
 			TrimString(line);
 
 			char line_pieces[2][128];
@@ -50,27 +49,25 @@ public void OnMapStart()
 		}
 
 	}
-	else
+	else {
 		LogError("[SurfTimer] %s not found", MAXVEL_MAPS_PATH);
+	}
 
-	if (max_vel_maps != null)
+	if (max_vel_maps != null) {
 		CloseHandle(max_vel_maps);
+	}
 
 	//check if the map is in the whitelist
 	char szMaxVel[16];
 
 	//if the map is in the whitelist
-	if(MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel)))
+	if (MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel))) {
 		custom_maxvel = StringToInt(szMaxVel);
-
-
-	FindConVar("sv_airaccelerate").AddChangeHook(airacceleratesetting);
-	FindConVar("sv_accelerate").AddChangeHook(acceleratesetting);
-	FindConVar("sv_maxvelocity").AddChangeHook(velocitysetting);
+	}
 
 	AutoExecConfig_SetCreateDirectory(true);
 	AutoExecConfig_SetCreateFile(true);
-	AutoExecConfig_SetFile("ez_config");
+	AutoExecConfig_SetFile("cvar_enforce");
 
 	i_airaccel = AutoExecConfig_CreateConVar("airaccelerate", "2000", "specifies value of airaccelerate", 0, true, 0.00, true, 10000.0);
 	i_accel = AutoExecConfig_CreateConVar("accelerate", "10", "specifies value of accelerate", 0, true, 0.00, true, 100.0);
@@ -78,18 +75,24 @@ public void OnMapStart()
 
 	AutoExecConfig_ExecuteFile();
 	AutoExecConfig_CleanFile();
+
+	FindConVar("sv_airaccelerate").AddChangeHook(airacceleratesetting);
+	FindConVar("sv_accelerate").AddChangeHook(acceleratesetting);
+	FindConVar("sv_maxvelocity").AddChangeHook(velocitysetting);
 }
 
 public void airacceleratesetting(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	if (convar.IntValue != i_airaccel.IntValue)
+	if (convar.IntValue != i_airaccel.IntValue) {
 		convar.IntValue = i_airaccel.IntValue;
+	}
 }
 
 public void acceleratesetting(ConVar convar, const char[] oldValue, const char[] newValue)
 {
-	if (convar.IntValue != i_accel.IntValue)
+	if (convar.IntValue != i_accel.IntValue) {
 		convar.IntValue = i_accel.IntValue;
+	}
 }
 
 public void velocitysetting(ConVar convar, const char[] oldValue, const char[] newValue)
@@ -97,10 +100,12 @@ public void velocitysetting(ConVar convar, const char[] oldValue, const char[] n
 	char szMaxVel[16];
 
 	//IF THE MAPS IS NOT SUPOSED TO HAVE A MAXVEL;
-	if(!MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel))){
-		if (convar.IntValue != i_maxvel.IntValue)
+	if (!MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel))) {
+		if (convar.IntValue != i_maxvel.IntValue) {
 			convar.IntValue = i_maxvel.IntValue;
+		}
 	}
-	else
+	else {
 		convar.IntValue = custom_maxvel;
+	}
 }
