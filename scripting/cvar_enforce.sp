@@ -5,7 +5,7 @@
 #pragma newdecls required
 #pragma semicolon 1
 
-#define MAXVEL_MAPS_PATH "configs/surftimer/maxvel_maps.txt"
+#define MAXVEL_MAPS_PATH "configs/maxvel_maps.txt"
 
 char szMapName[128];
 
@@ -22,7 +22,7 @@ public Plugin myinfo =
 	name        = "Cvar Enforce",
 	author      = "shipy",
 	description = "enforce cvars on maps with hardcoded settings",
-	version     = "2.0.1",
+	version     = "2.0.2",
 	url         = "https://github.com/shipyy/cvar_enforce"
 };
 
