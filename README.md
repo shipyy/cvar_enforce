@@ -2,6 +2,10 @@
 
 Enforce Cvars on maps with hardcoded settings like ``sv_masvelocity` or `sv_airaccelerate` and allow to set a specific value of `sv_maxvelocity` for each map.
 
+# Install
+
+Download `CvarEnforce-v*.*.*.zip` from the latest release and afterwards drag and drop the contents into your `addons/sourcemod` folder
+
 # Example
 
 ```python

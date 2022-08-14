@@ -22,7 +22,7 @@ public Plugin myinfo =
 	name        = "Cvar Enforce",
 	author      = "shipy",
 	description = "enforce cvars on maps with hardcoded settings",
-	version     = "2.0.0",
+	version     = "2.0.1",
 	url         = "https://github.com/shipyy/cvar_enforce"
 };
 
@@ -40,6 +40,10 @@ public void OnMapStart()
 	if (max_vel_maps != null) {
 
 		while (!IsEndOfFile(max_vel_maps) && ReadFileLine(max_vel_maps, line, sizeof(line))) {
+
+			if (StrContains(line, "//", false) == 0 || IsNullString(line) || strlen(line) == 0)
+				continue;
+
 			TrimString(line);
 
 			char line_pieces[2][128];
