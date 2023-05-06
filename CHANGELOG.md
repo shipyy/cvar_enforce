@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - values now are set in the correct method `onmapstart()`
 - setconvar for custom maxvelocity now works as intended
 
+Full Changelog: https://github.com/shipyy/cvar_enforce/compare/v2.1.0...v2.1.1
+
 ## [2.1.0]
 
 ### Added
@@ -22,6 +24,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     `use_accelerate`
     `use_maxvel`
     `use_custom_maxvel`
+
+Full Changelog: https://github.com/shipyy/cvar_enforce/compare/v2.0.2...v2.1.0
 
 ## [2.0.2]
 
