@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.0]
 
+### Fixed
+
+- added missing check for  maxvelocity in hookvar for maxvelocity
+- values now are set in the correct method `onmapstart()`
+- setconvar for custom maxvelocity now works as intended
+
+## [2.1.0]
+
 ### Added
 
 - new CONVAR to use custom maxvels in case only certain maps need to be changed, but the rest just need to use the "default" values database ( I THINK THIS MAKES IT MORE LOGICAL, THIS CONVAR BASICALLY CHECKS IF MAXVEL_MAPS.TXT HAS A VALUE FOR THE MAP AND )

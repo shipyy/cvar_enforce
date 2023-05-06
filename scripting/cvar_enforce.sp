@@ -28,7 +28,7 @@ public Plugin myinfo =
 	name        = "Cvar Enforce",
 	author      = "shipy",
 	description = "enforce cvars on maps with hardcoded settings",
-	version     = "2.1.0",
+	version     = "2.1.1",
 	url         = "https://github.com/shipyy/cvar_enforce"
 };
 
@@ -49,15 +49,17 @@ public void OnMapStart()
 
 	AutoExecConfig_ExecuteFile();
 	AutoExecConfig_CleanFile();
+
+	SetConVars();
 }
 
-public void OnConfigsExecuted()
+public void SetConVars()
 {
 	//SETTINGS
 	PrintToServer("========== [CVAR ENFORCE] ==========");
-	PrintToServer("Force AirAccelerate: %b | Value: %d ", b_Use_airaccel.BoolValue, i_airaccel);
-	PrintToServer("Force Accelerate: %b | Value: %d", b_Use_accel.BoolValue, i_accel);
-	PrintToServer("Force MaxVelocity: %b | Value: %d", b_Use_maxvel.BoolValue, i_maxvel);
+	PrintToServer("Force AirAccelerate: %b | Value: %d ", b_Use_airaccel.BoolValue, i_airaccel.IntValue);
+	PrintToServer("Force Accelerate: %b | Value: %d", b_Use_accel.BoolValue, i_accel.IntValue);
+	PrintToServer("Force MaxVelocity: %b | Value: %d", b_Use_maxvel.BoolValue, i_maxvel.IntValue);
 
 	if ( b_Use_airaccel.BoolValue )
 		FindConVar("sv_airaccelerate").AddChangeHook(airacceleratesetting);
@@ -112,7 +114,7 @@ public void OnConfigsExecuted()
 			PrintToServer("Specific Map MaxVelocity! | Value: %d", custom_maxvel);
 		}
 
-		FindConVar("sv_maxvelocity").IntValue = custom_maxvel;
+		SetConVarInt(FindConVar("sv_maxvelocity"), custom_maxvel, true, true);
 	}
 
 	PrintToServer("====================================");
@@ -138,8 +140,10 @@ public void velocitysetting(ConVar convar, const char[] oldValue, const char[] n
 
 	//IF THE MAPS IS NOT SUPOSED TO HAVE A MAXVEL;
 	if (!MaxVelMap.GetString(szMapName, szMaxVel, sizeof(szMaxVel))) {
-		if (convar.IntValue != i_maxvel.IntValue) {
-			convar.IntValue = i_maxvel.IntValue;
+		if ( b_Use_maxvel.BoolValue ) {
+			if (convar.IntValue != i_maxvel.IntValue) {
+				convar.IntValue = i_maxvel.IntValue;
+			}
 		}
 	}
 	else {
